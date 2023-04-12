@@ -1,6 +1,6 @@
 #ifndef RECCHECK
 // For debugging
-#include <iostream>
+
 // For std::remove
 #include <algorithm> 
 #include <map>
@@ -60,45 +60,9 @@ std::set<std::string> wordle(
 		abc(*iter, 0, solSet, dict);
 	}
 
-	//display set
-	// set<string>::iterator iter = generatedSet.begin();
-	// for(; iter != generatedSet.end(); ++iter){
-	// 	cout << *iter << endl;
-	// }
-	// cout << "count: " << count << " length: " << generatedSet.size() << endl;
-
 	return solSet;
 }
 
-// void distributeFloat(string givenWord, string floatLetters, int wordIdx,
-// 	set<int> excludeIdx, set<string>& generatedSet, int& count)
-// {
-// 	int floatRemain = floatLetters.length() - excludeIdx.size();
-	
-
-// 	if(floatLetters.length() - excludeIdx.size() == 0){
-// 		//cout << givenWord << endl;
-// 		count++;
-// 		generatedSet.insert(givenWord);
-// 	}
-// 	else{
-// 		for(int i = wordIdx; i < givenWord.length(); i++){
-// 			//int wordRemain = givenWord.length() - i - 1;
-// 			if(givenWord[i] == '-'){
-// 				for(int j = 0; j < floatLetters.length(); j++){
-// 					if(excludeIdx.find(j) == excludeIdx.end()){
-// 						givenWord[i] = floatLetters[j];
-// 						set<int> nextExcluded; 
-// 						nextExcluded = excludeIdx;
-// 						nextExcluded.insert(j);
-// 						distributeFloat(givenWord, floatLetters, wordIdx + 1, nextExcluded, generatedSet, count);
-// 						givenWord[i] = '-';
-// 					}
-// 				}
-// 			}
-// 		}
-// 	}
-// }
 
 void abc(string givenWord, int wordIdx, set<string>& solutions, const set<string>& dict){
 	
@@ -117,7 +81,6 @@ void abc(string givenWord, int wordIdx, set<string>& solutions, const set<string
 		for(int i = 97; i < 123; i++){
 			char letter = i;
 			givenWord[wordIdx] = letter;
-			//cout << givenWord << endl;
 			abc(givenWord, wordIdx + 1, solutions, dict);
 			givenWord[wordIdx] = '-';
 		}
@@ -133,7 +96,6 @@ void blankCount(string givenCopy, int gIdx, vector<int>& blanks, int& blankC, st
 		if(givenCopy[gIdx] == '-'){
 			blanks.push_back(gIdx);
 			blankC++;
-			//if we have more blanks than float, add blanks to permute
 			if(blankC > floatString.length()){
 				floatString += "-";
 			}
@@ -142,17 +104,6 @@ void blankCount(string givenCopy, int gIdx, vector<int>& blanks, int& blankC, st
 	}
 }
 
-//function to zip permutation into givenWord
-// void binsert(string& givenCopy, vector<int>& blanks, int& blankC, int idx, string permString){
-// 	if(blankC == -1){
-// 		return;
-// 	}
-
-// 	else{
-// 		givenCopy[blanks[idx]] = permString[idx];
-// 		binsert(givenCopy, blanks, blankC - 1, idx + 1, permString);
-// 	}
-// }
 
 void binsert(string& givenCopy, vector<int>& blanks, int& blankC, int idx, string permString){
 	for(int i = blankC; i > 0; i--){
@@ -172,24 +123,9 @@ void floatHelper(string givenWord, set<string>& permutedStrings, string floatStr
 	string gWord = givenWord;
 
 	blankCount(gWord, 0, blankIdx, blankC, newFloat);
-	//cout << newFloat << endl;
-	// for(int i = 0; i < blankIdx.size(); i++){
-	// 	//cout << blankIdx[i] << " ";
-	// }
-	permuteFloat(newFloat, floatSet, 0, newFloat.length()-1);
-	// string test = "wxyz";
-	// permuteFloat(test, floatSet, 0, test.length()-1);
-	// for(auto it= floatSet.begin(); it != floatSet.end(); ++it){
-	// 	cout << *it << endl;
-	// }
 
-	// string var1 =  "string";
-	// vector<int> var2;
-	// var2.push_back(2);
-	// int var3 = 2;
-	// int var4 = 0;
-	// string var5 = "dumbass";
-	// binsert(var1, var2, var3, var4, var5);
+	permuteFloat(newFloat, floatSet, 0, newFloat.length()-1);
+
 
 	set<string>::iterator floatSetIter = floatSet.begin();
 	for(; floatSetIter != floatSet.end(); ++floatSetIter){
@@ -197,7 +133,6 @@ void floatHelper(string givenWord, set<string>& permutedStrings, string floatStr
 		string givenC = givenWord;
 		binsert(givenC, blankIdx, blankC, idx, pString);
 		permutedStrings.insert(givenC);
-		//cout << givenC << endl;
 	}
 }
 
@@ -208,11 +143,8 @@ void permuteFloat(string& floatString, set<string>& floatsSet, int begin, int en
 	}
 	else {
 		for(int i = begin; i <= end; i++){
-			// cout << "1 " << floatString << endl;
 
 			swap(floatString[begin], floatString[i]);
-
-			// cout << "2 " << floatString << endl;
 
 			permuteFloat(floatString, floatsSet, begin + 1, end);
 
